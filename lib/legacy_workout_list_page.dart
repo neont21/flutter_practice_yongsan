@@ -13,42 +13,43 @@ class WorkoutListPage extends StatelessWidget {
     {'name': '사이드 플랭크', 'image': 'side_plank.png', 'minutes': 20},
     {'name': '리버스 플랭크', 'image': 'reverse_plank.png', 'minutes': 15},
     {'name': '힙 브릿지', 'image': 'hip_bridge.png', 'minutes': 25},
-    {'name': '어깨 스트레칭', 'image': 'shoulder_stretch.png', 'minutes': 15},
+    {'name': '어꺠 스트레칭', 'image': 'shoulder_stretch.png', 'minutes': 15},
     {'name': '햄스트링', 'image': 'hamstring_stretch.png', 'minutes': 10},
   ];
 
-  List<ListTile> getWorkoutList() {
-    List<ListTile> workoutTiles = [];
+  List<Row> getWorkoutList() {
+    List<Row> workoutRows = [];
 
     for (var i = 0; i < workoutList.length; i++) {
       String name = workoutList[i]['name'];
       String image = workoutList[i]['image'];
       int minutes = workoutList[i]['minutes'];
 
-      workoutTiles.add(
-        ListTile(
-          contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 10),
-          leading: Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-              image: DecorationImage(image: AssetImage('assets/$image')),
-              shape: BoxShape.circle,
+      workoutRows.add(
+        Row(
+          spacing: 20,
+          children: [
+            Container(
+              width: 100,
+              height: 100,
+              decoration: BoxDecoration(
+                image: DecorationImage(image: AssetImage('assets/$image')),
+                shape: BoxShape.circle,
+              ),
             ),
-          ),
-          title: Text(
-            '${i + 1}. $name',
-            style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-          ),
-          trailing: Text(
-            '$minutes분',
-            style: TextStyle(fontSize: 20, color: Colors.blueAccent),
-          ),
+            Expanded(
+              child: Text('${i + 1}. $name', style: TextStyle(fontSize: 20)),
+            ),
+            Text(
+              '$minutes 분',
+              style: TextStyle(fontSize: 20, color: Colors.blueAccent),
+            )
+          ],
         ),
       );
     }
 
-    return workoutTiles;
+    return workoutRows;
   }
 
   @override
@@ -56,22 +57,10 @@ class WorkoutListPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: Center(child: Text('Workout List'))),
       body: Padding(
-        padding: EdgeInsets.all(12),
-        child: ListView(
-          children: [
-            ListTile(
-              contentPadding: EdgeInsets.only(left: 40, right: 10),
-              title: Text(
-                '운동',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
-              ),
-              trailing: Text(
-                '세트 당 소요시간',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
-              ),
-            ),
-            ...getWorkoutList(),
-          ],
+        padding: EdgeInsetsGeometry.all(20),
+        child: Column(
+          spacing: 20,
+          children: getWorkoutList(),
         ),
       ),
     );
