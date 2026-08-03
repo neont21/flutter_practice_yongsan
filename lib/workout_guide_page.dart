@@ -244,7 +244,7 @@ class _WorkoutGuidePageState extends State<WorkoutGuidePage> {
             child: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: AssetImage('assets/${_currentWorkout.imageName}'),
+                  image: AssetImage('assets/workout/${_currentWorkout.imageName}'),
                   fit: BoxFit.fitWidth,
                 ),
               ),
