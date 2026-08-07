@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'dashboard_card.dart';
 
@@ -272,6 +273,9 @@ class WorkoutHomePage extends StatelessWidget {
                     AspectRatio(
                       aspectRatio: 1 / 1,
                       child: DashboardCard(
+                        routeOnTap: () {
+                          context.go('/workout_home/workout_list/0');
+                        },
                         labelIcon: Icon(
                           Icons.run_circle_outlined,
                           size: textTheme.labelLarge?.fontSize,
@@ -305,6 +309,9 @@ class WorkoutHomePage extends StatelessWidget {
                     AspectRatio(
                       aspectRatio: 1 / 1,
                       child: DashboardCard(
+                        routeOnTap: () {
+                          context.go('/workout_home/workout_list/1');
+                        },
                         labelIcon: Icon(
                           Icons.run_circle_outlined,
                           size: textTheme.labelLarge?.fontSize,
@@ -338,6 +345,9 @@ class WorkoutHomePage extends StatelessWidget {
                     AspectRatio(
                       aspectRatio: 1 / 1,
                       child: DashboardCard(
+                        routeOnTap: () {
+                          context.go('/workout_home/workout_list/2');
+                        },
                         labelIcon: Icon(
                           Icons.run_circle_outlined,
                           size: textTheme.labelLarge?.fontSize,
