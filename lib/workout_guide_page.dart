@@ -37,6 +37,8 @@ class _WorkoutGuidePageState extends State<WorkoutGuidePage> {
     _workoutIndex = widget.workoutIndex;
     _currentWorkout = workouts[_workoutIndex];
     _remainSeconds = _currentWorkout.minutes * 60;
+
+    WorkoutManager.increaseTodayWorkoutMinutes(_currentWorkout.minutes);
   }
 
   @override
@@ -97,12 +99,14 @@ class _WorkoutGuidePageState extends State<WorkoutGuidePage> {
     _workoutIndex = (_workoutIndex + 1) % workouts.length;
     _currentWorkout = workouts[_workoutIndex];
     _remainSeconds = _currentWorkout.minutes * 60;
+    WorkoutManager.increaseTodayWorkoutMinutes(_currentWorkout.minutes);
   }
 
   void _prev() {
     _workoutIndex = (_workoutIndex - 1) % workouts.length;
     _currentWorkout = workouts[_workoutIndex];
     _remainSeconds = _currentWorkout.minutes * 60;
+    WorkoutManager.increaseTodayWorkoutMinutes(_currentWorkout.minutes);
   }
 
   @override

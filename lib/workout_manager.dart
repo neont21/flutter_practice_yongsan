@@ -1,3 +1,4 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'workout.dart';
 import 'workout_group.dart';
 
@@ -143,4 +144,16 @@ class WorkoutManager {
       workouts: [workouts[3], workouts[0], workouts[2], workouts[6]],
     ),
   ];
+
+  static final asyncPrefs = SharedPreferencesAsync();
+
+  static Future<int> getTodayWorkoutMinutes() async {
+    int todayMinutes = await asyncPrefs.getInt('todayMinutes') ?? 0;
+    return todayMinutes;
+  }
+
+  static Future<void> increaseTodayWorkoutMinutes(int minutes) async {
+    int todayMinutes = await asyncPrefs.getInt('todayMinutes') ?? 0;
+    await asyncPrefs.setInt('todayMinutes', todayMinutes + minutes);
+  }
 }
