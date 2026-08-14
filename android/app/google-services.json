@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "521551501703",
+    "project_id": "sesac-workout-tracker",
+    "storage_bucket": "sesac-workout-tracker.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:521551501703:android:cc946d3e980b7dcb23db22",
+        "android_client_info": {
+          "package_name": "com.neonsigntrap.workout_tracker_2026"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3S-iTreWZjNmlVAh7DeOxS6OUCZNtQ80"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

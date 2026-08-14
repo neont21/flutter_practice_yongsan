@@ -1,19 +1,65 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import 'dashboard_card.dart';
+import 'workout_manager.dart';
 
-class WorkoutHomePage extends StatelessWidget {
-  WorkoutHomePage({super.key});
+class WorkoutHomePage extends StatefulWidget {
+  const WorkoutHomePage({super.key});
 
-  final int _dailyMinutes = 450;
+  @override
+  State<WorkoutHomePage> createState() => _WorkoutHomePageState();
+}
+
+class _WorkoutHomePageState extends State<WorkoutHomePage> {
+  // final int _dailyMinutes = 450;
   final int _dailyGoal = 500;
-  final int _dailyKcal = 2400;
+  // final int _dailyKcal = 2400;
   final int _monthlyHours = 403;
   final int _monthlyGoal = 450;
   final int _lastMonthlyHours = 393;
 
   final NumberFormat commaThousands = NumberFormat.decimalPattern();
+
+  late Future<({int calories, int minutes})> _todayData;
+
+  void continueWorkout() {
+    WorkoutManager.getRecentWorkout().then((recentWorkout) {
+      if (!mounted) {
+        return;
+      }
+      int groupIndex = recentWorkout.groupIndex;
+      int workoutIndex = recentWorkout.workoutIndex;
+
+      if (groupIndex == -1) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('최근 운동이 없습니다.'),
+            duration: Duration(seconds: 3),
+          ),
+        );
+      } else {
+        context.go(
+          '/workout_home/workout_list/$groupIndex/workout_guide/$workoutIndex',
+        );
+      }
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // WorkoutManager.resetTodayWorkoutData();
+    _todayData = WorkoutManager.getTodayWorkoutData();
+  }
+
+  @override
+  void didUpdateWidget(covariant WorkoutHomePage oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    _todayData = WorkoutManager.getTodayWorkoutData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -112,69 +158,89 @@ class WorkoutHomePage extends StatelessWidget {
                           color: colorScheme.outline,
                         ),
                       ),
-                      info: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Stack(
-                            alignment: Alignment.center,
+                      info: FutureBuilder<({int minutes, int calories})>(
+                        future: _todayData,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return Center(child: CircularProgressIndicator());
+                          }
+                          if (snapshot.hasError) {
+                            return Center(child: Text('Data Error'));
+                          }
+                          // int? data = snapshot.data;
+                          final workoutMinutes = snapshot.data?.minutes ?? 0;
+                          final workoutCalories = snapshot.data?.calories ?? 0;
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             children: [
-                              SizedBox(
-                                width: 120,
-                                height: 120,
-                                child: CircularProgressIndicator(
-                                  value: _dailyMinutes / _dailyGoal,
-                                  color: Colors.blue,
-                                  backgroundColor: colorScheme.outlineVariant,
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsGeometry.symmetric(
-                                  vertical: 20,
-                                ),
-                                child: Text.rich(
-                                  textAlign: TextAlign.center,
-                                  TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text: '운동 시간\n',
-                                        style: textTheme.titleMedium?.copyWith(
-                                          color: colorScheme.outline,
-                                        ),
-                                      ),
-                                      TextSpan(
-                                        text: '$_dailyMinutes분',
-                                        style: textTheme.titleLarge?.copyWith(
-                                          color: Colors.blue,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
+                              Stack(
+                                alignment: Alignment.center,
+                                children: [
+                                  SizedBox(
+                                    width: 120,
+                                    height: 120,
+                                    child: CircularProgressIndicator(
+                                      value: workoutMinutes / _dailyGoal,
+                                      color: Colors.blue,
+                                      backgroundColor:
+                                          colorScheme.outlineVariant,
+                                    ),
                                   ),
+                                  Padding(
+                                    padding: EdgeInsetsGeometry.symmetric(
+                                      vertical: 20,
+                                    ),
+                                    child: Text.rich(
+                                      textAlign: TextAlign.center,
+                                      TextSpan(
+                                        children: [
+                                          TextSpan(
+                                            text: '운동 시간\n',
+                                            style: textTheme.titleMedium
+                                                ?.copyWith(
+                                                  color: colorScheme.outline,
+                                                ),
+                                          ),
+                                          TextSpan(
+                                            text: '$workoutMinutes분',
+                                            style: textTheme.titleLarge
+                                                ?.copyWith(
+                                                  color: Colors.blue,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Text.rich(
+                                textAlign: TextAlign.center,
+                                TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: '소모 칼로리\n',
+                                      style: textTheme.bodyMedium?.copyWith(
+                                        color: colorScheme.outline,
+                                      ),
+                                    ),
+                                    TextSpan(
+                                      text:
+                                          // '${commaThousands.format(_dailyKcal)} kcal',
+                                          '${commaThousands.format(workoutCalories)} kcal',
+                                      style: textTheme.bodyLarge?.copyWith(
+                                        color: Colors.blue,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
                                 ),
                               ),
                             ],
-                          ),
-                          Text.rich(
-                            textAlign: TextAlign.center,
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: '소모 칼로리\n',
-                                  style: textTheme.bodyMedium?.copyWith(
-                                    color: colorScheme.outline,
-                                  ),
-                                ),
-                                TextSpan(
-                                  text: '${commaThousands.format(_dailyKcal)} kcal',
-                                  style: textTheme.bodyLarge?.copyWith(
-                                    color: Colors.blue,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
+                          );
+                        },
                       ),
                     ),
                   ),
@@ -207,28 +273,31 @@ class WorkoutHomePage extends StatelessWidget {
                                 ),
                               ),
                               Padding(
-                              padding: EdgeInsetsGeometry.symmetric(vertical: 20),
-                              child: Text.rich(
-                                textAlign: TextAlign.center,
-                                TextSpan(
-                                  children: [
-                                    TextSpan(
-                                      text: '운동 시간\n',
-                                      style: textTheme.titleMedium?.copyWith(
-                                        color: colorScheme.outline,
+                                padding: EdgeInsetsGeometry.symmetric(
+                                  vertical: 20,
+                                ),
+                                child: Text.rich(
+                                  textAlign: TextAlign.center,
+                                  TextSpan(
+                                    children: [
+                                      TextSpan(
+                                        text: '운동 시간\n',
+                                        style: textTheme.titleMedium?.copyWith(
+                                          color: colorScheme.outline,
+                                        ),
                                       ),
-                                    ),
-                                    TextSpan(
-                                      text: '$_monthlyHours시간',
-                                      style: textTheme.titleLarge?.copyWith(
-                                        color: Colors.blue,
-                                        fontWeight: FontWeight.bold,
+                                      TextSpan(
+                                        text: '$_monthlyHours시간',
+                                        style: textTheme.titleLarge?.copyWith(
+                                          color: Colors.blue,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
                               ),
-                            ),],
+                            ],
                           ),
                           Text.rich(
                             textAlign: TextAlign.center,
@@ -241,7 +310,8 @@ class WorkoutHomePage extends StatelessWidget {
                                   ),
                                 ),
                                 TextSpan(
-                                  text: '${_monthlyHours - _lastMonthlyHours}시간 ',
+                                  text:
+                                      '${_monthlyHours - _lastMonthlyHours}시간 ',
                                   style: textTheme.bodyLarge?.copyWith(
                                     color: Colors.blue,
                                     fontWeight: FontWeight.bold,
@@ -386,6 +456,9 @@ class WorkoutHomePage extends StatelessWidget {
             Expanded(
               flex: 2,
               child: DashboardCard(
+                routeOnTap: () {
+                  continueWorkout();
+                },
                 labelIcon: Icon(
                   Icons.repeat_outlined,
                   size: textTheme.titleMedium?.fontSize,

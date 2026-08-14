@@ -147,13 +147,42 @@ class WorkoutManager {
 
   static final asyncPrefs = SharedPreferencesAsync();
 
-  static Future<int> getTodayWorkoutMinutes() async {
+  // static Future<int> getTodayWorkoutMinutes() async {
+  //   int todayMinutes = await asyncPrefs.getInt('todayMinutes') ?? 0;
+  //   return todayMinutes;
+  // }
+  //
+  // static Future<void> increaseTodayWorkoutMinutes(int minutes) async {
+  //   int todayMinutes = await asyncPrefs.getInt('todayMinutes') ?? 0;
+  //   await asyncPrefs.setInt('todayMinutes', todayMinutes + minutes);
+  // }
+
+  static Future<({int minutes, int calories})> getTodayWorkoutData() async {
     int todayMinutes = await asyncPrefs.getInt('todayMinutes') ?? 0;
-    return todayMinutes;
+    int todayCalories = await asyncPrefs.getInt('todayCalories') ?? 0;
+    return (minutes: todayMinutes, calories: todayCalories);
   }
 
-  static Future<void> increaseTodayWorkoutMinutes(int minutes) async {
+  static Future<void> increaseTodayWorkoutData({int minutes = 0, int calories = 0}) async {
     int todayMinutes = await asyncPrefs.getInt('todayMinutes') ?? 0;
+    int todayCalories = await asyncPrefs.getInt('todayCalories') ?? 0;
     await asyncPrefs.setInt('todayMinutes', todayMinutes + minutes);
+    await asyncPrefs.setInt('todayCalories', todayCalories + calories);
+  }
+
+  static void resetTodayWorkoutData() async {
+    await asyncPrefs.remove('todayMinutes');
+    await asyncPrefs.remove('todayCalories');
+  }
+
+  static Future<({int groupIndex, int workoutIndex})> getRecentWorkout() async {
+    int recentGuideIndex = await asyncPrefs.getInt('recentGuideIndex') ?? -1;
+    int recentWorkoutIndex = await asyncPrefs.getInt('recentWorkoutIndex') ?? -1;
+    return (groupIndex: recentGuideIndex, workoutIndex: recentWorkoutIndex);
+  }
+
+  static Future<void> setRecentWorkout(int groupIndex, int workoutIndex) async {
+    await asyncPrefs.setInt('recentGuideIndex', groupIndex);
+    await asyncPrefs.setInt('recentWorkoutIndex', workoutIndex);
   }
 }
