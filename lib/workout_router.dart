@@ -7,6 +7,7 @@ import 'workout_list_page.dart';
 import 'workout_guide_page.dart';
 import 'settings_page.dart';
 import 'login_page.dart';
+import 'registration_page.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(
   debugLabel: 'root',
@@ -73,6 +74,12 @@ final router = GoRouter(
                 GoRoute(
                   path: 'login',
                   builder: (context, state) => LoginPage(),
+                  routes: [
+                    GoRoute(
+                      path: 'registration',
+                      builder: (context, state) => RegistrationPage(),
+                    ),
+                  ],
                 ),
               ],
             ),
