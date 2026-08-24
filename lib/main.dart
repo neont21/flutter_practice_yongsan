@@ -3,6 +3,7 @@ import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'workout_router.dart';
+import 'show_snackbar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -19,6 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp.router(
       routerConfig: router,
+      scaffoldMessengerKey: snackBarKey,
       theme: FlexThemeData.light(
         scheme: FlexScheme.blueWhale,
         fontFamily: 'Pretendard',

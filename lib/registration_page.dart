@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'firebase_auth_service.dart';
+import 'show_snackbar.dart';
 
 class RegistrationPage extends StatelessWidget {
   RegistrationPage({super.key});
@@ -131,10 +132,10 @@ class RegistrationPage extends StatelessWidget {
                     border: UnderlineInputBorder(),
                     floatingLabelBehavior: FloatingLabelBehavior.always,
                   ),
-                  validator: (value){
-                    if(value==null || value.isEmpty){
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
                       return '비밀번호를 한번 더 입력하세요.';
-                    }else if(value != _passwordController.text){
+                    } else if (value != _passwordController.text) {
                       return '비밀번호가 일치하지 않습니다.';
                     }
                     return null;
@@ -147,11 +148,16 @@ class RegistrationPage extends StatelessWidget {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         _formKey.currentState!.save();
-                        _auth.signUpWithEmail(
-                          email: _email!,
-                          password: _password!,
-                          name: _name,
-                        );
+                        _auth
+                            .signUpWithEmail(
+                              email: _email!,
+                              password: _password!,
+                              name: _name,
+                            )
+                            .then((value) {})
+                            .catchError((error) {
+                              showSnackBar('$error');
+                            });
                       }
                     },
                     style: ElevatedButton.styleFrom(

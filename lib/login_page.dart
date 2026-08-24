@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:workout_tracker_2026/show_snackbar.dart';
+import 'firebase_auth_service.dart';
 
 class LoginPage extends StatelessWidget {
   LoginPage({super.key});
@@ -7,6 +9,7 @@ class LoginPage extends StatelessWidget {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String? _email;
   String? _password;
+  final FirebaseAuthService _auth = FirebaseAuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +67,10 @@ class LoginPage extends StatelessWidget {
                   style: TextStyle(color: Colors.black),
                   decoration: InputDecoration(
                     labelText: 'Email',
-                    labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w500,),
+                    labelStyle: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                    ),
                     filled: true,
                     fillColor: Colors.grey.shade200,
                     hintText: 'example@example.com',
@@ -89,7 +95,10 @@ class LoginPage extends StatelessWidget {
                   style: TextStyle(color: Colors.black),
                   decoration: InputDecoration(
                     labelText: 'Password',
-                    labelStyle: TextStyle(color: Colors.black, fontWeight: FontWeight.w500,),
+                    labelStyle: TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                    ),
                     filled: true,
                     fillColor: Colors.grey.shade200,
                     prefixIcon: Icon(Icons.lock_outline, color: Colors.black),
@@ -118,7 +127,7 @@ class LoginPage extends StatelessWidget {
                     TextButton(
                       onPressed: () {},
                       child: Text('Forgot your password?'),
-                    )
+                    ),
                   ],
                 ),
                 SizedBox(
@@ -127,6 +136,18 @@ class LoginPage extends StatelessWidget {
                     onPressed: () {
                       if (_formKey.currentState?.validate() ?? false) {
                         _formKey.currentState?.save();
+                        _auth
+                            .signInWithEmail(
+                              email: _email!,
+                              password: _password!,
+                            )
+                            .then((value) {
+                              showSnackBar('로그인 성공');
+                              context.go('/workout_home');
+                            })
+                            .catchError((error) {
+                              showSnackBar('$error');
+                            });
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -153,7 +174,7 @@ class LoginPage extends StatelessWidget {
                         context.go('/settings/login/registration');
                       },
                       child: Text('Sign up'),
-                    )
+                    ),
                   ],
                 ),
               ],

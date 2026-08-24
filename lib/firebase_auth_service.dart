@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 
 class FirebaseAuthService {
   final FirebaseAuth _auth;
@@ -6,6 +7,8 @@ class FirebaseAuthService {
   FirebaseAuthService() : _auth = FirebaseAuth.instance {
     _auth.setLanguageCode('kr');
   }
+
+  User? get user => _auth.currentUser;
 
   Future<void> signUpWithEmail({
     required String email,
@@ -37,13 +40,68 @@ class FirebaseAuthService {
     }
   }
 
-  Future<void> signInWithEmail() async {}
+  Future<void> signInWithEmail({
+    required String email,
+    required String password,
+}) async {
+    String? errorMessage;
+    try {
+      await _auth.signInWithEmailAndPassword(email: email, password: password);
+    } on FirebaseAuthException catch (authError) {
+      switch (authError.code) {
+        case '':
+          errorMessage='';
+        default:
+          errorMessage=authError.message;
+      }
+    } catch (e) {
+      errorMessage = '로그인 에러: $e';
+    }
+    if (errorMessage != null) {
+      throw Exception(errorMessage);
+    }
+  }
 
   Future<void> resetPassword() async {}
 
   Future<void> deleteAccount() async {}
 
-  Future<void> signOut() async {}
+  Future<void> signOut() async {
+    String? errorMessage;
+    try {
+      await _auth.signOut();
+    } on FirebaseAuthException catch (authError) {
+      switch (authError.code) {
+        case '':
+          errorMessage='';
+        default:
+          errorMessage=authError.message;
+      }
+    } catch (e) {
+      errorMessage = '로그아웃 에러: $e';
+    }
+    if (errorMessage != null) {
+      throw Exception(errorMessage);
+    }
+  }
 
-  Future<void> updateProfile() async {}
+  Future<void> updatePhoto(String? url) async {
+    try {
+      await _auth.currentUser?.updatePhotoURL(url);
+    } catch (e) {
+      throw Exception('프로필 사진 수정 실패: $e');
+    }
+  }
+
+  Future<void> deletePhoto() async {
+    try {
+      await _auth.currentUser?.updatePhotoURL(null);
+    } catch (e) {
+      throw Exception('프로필 사진 삭제 실패: $e');
+    }
+  }
+
+  bool isLoggedIn() {
+    return _auth.currentUser != null;
+  }
 }

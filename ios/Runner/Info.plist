@@ -26,6 +26,12 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Upload profile image from camera</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Upload profile video</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Upload profile image from gallery</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
