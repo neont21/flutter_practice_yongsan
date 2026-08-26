@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'workout.dart';
-import 'workout_group.dart';
+import '../models/workout.dart';
+import '../models/workout_group.dart';
 
 class WorkoutManager {
   static final List<Workout> workouts = [

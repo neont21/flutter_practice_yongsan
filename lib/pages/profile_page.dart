@@ -2,9 +2,9 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'firebase_storage_service.dart';
-import 'firebase_auth_service.dart';
-import 'show_snackbar.dart';
+import '../services/firebase_storage_service.dart';
+import '../services/firebase_auth_service.dart';
+import '../widgets/show_snackbar.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});

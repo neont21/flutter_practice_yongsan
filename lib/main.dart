@@ -1,15 +1,15 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:flex_color_scheme/flex_color_scheme.dart';
 import 'workout_router.dart';
-import 'show_snackbar.dart';
+import 'widgets/show_snackbar.dart';
+import 'logics/my_workout_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
 
@@ -18,17 +18,19 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: router,
-      scaffoldMessengerKey: snackBarKey,
-      theme: FlexThemeData.light(
-        scheme: FlexScheme.blueWhale,
-        fontFamily: 'Pretendard',
-        subThemesData: const FlexSubThemesData(
-          appBarBackgroundSchemeColor: SchemeColor.primary,
-        )
+    return MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => MyWorkoutProvider())],
+      child: MaterialApp.router(
+        routerConfig: router,
+        scaffoldMessengerKey: snackBarKey,
+        theme: FlexThemeData.light(
+          scheme: FlexScheme.blueWhale,
+          fontFamily: 'Pretendard',
+          subThemesData: const FlexSubThemesData(
+            appBarBackgroundSchemeColor: SchemeColor.primary,
+          ),
+        ),
       ),
     );
   }
 }
-

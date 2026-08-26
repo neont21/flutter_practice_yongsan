@@ -1,14 +1,16 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'workout_shell.dart';
-import 'landing_page.dart';
-import 'workout_home_page.dart';
-import 'workout_list_page.dart';
-import 'workout_guide_page.dart';
-import 'settings_page.dart';
-import 'login_page.dart';
-import 'registration_page.dart';
-import 'profile_page.dart';
+import 'pages/workout_shell.dart';
+import 'pages/landing_page.dart';
+import 'pages/workout_home_page.dart';
+import 'pages/my_workout_list_page.dart';
+import 'pages/workout_list_page.dart';
+import 'pages/workout_guide_page.dart';
+import 'pages/settings_page.dart';
+import 'pages/login_page.dart';
+import 'pages/registration_page.dart';
+import 'pages/profile_page.dart';
 
 final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>(
   debugLabel: 'root',
@@ -21,6 +23,21 @@ final GlobalKey<NavigatorState> _settingsNavigatorKey =
 
 final router = GoRouter(
   navigatorKey: _rootNavigatorKey,
+  redirect: (context, state) {
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user == null) {
+      if (state.uri.path != '/settings/login/registration' &&
+          state.uri.path != '/settings/reset_password' &&
+          state.uri.path != '/') {
+        return '/settings/login';
+      }
+    } else {
+      if (state.uri.path == '/settings/login' ||
+          state.uri.path == '/settings/login/registration') {
+        return '/settings';
+      }
+    }
+  },
   routes: [
     GoRoute(path: '/', builder: (context, state) => LandingPage()),
     StatefulShellRoute.indexedStack(
@@ -35,6 +52,12 @@ final router = GoRouter(
               path: '/workout_home',
               builder: (context, state) => WorkoutHomePage(),
               routes: [
+                GoRoute(
+                  path: 'my_workout_list',
+                  builder: (context, state) {
+                    return MyWorkoutListPage();
+                  },
+                ),
                 GoRoute(
                   path: 'workout_list/:group_index',
                   builder: (context, state) {

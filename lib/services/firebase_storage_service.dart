@@ -28,6 +28,27 @@ class FirebaseStorageService {
     }
   }
 
+  Future<String> uploadWorkoutImage({
+    required Uint8List bytes,
+    required String path,
+    required int pickedFileHash,
+  }) async {
+    try {
+      final workoutRef = storageRef.child('my_workout/${pickedFileHash}_workout_image.png');
+      final metadata = SettableMetadata(
+        contentType: 'image/png',
+        customMetadata: {
+          'picked-file-path': path,
+        },
+      );
+      await workoutRef.putData(bytes, metadata);
+      final downloadUrl = await workoutRef.getDownloadURL();
+      return downloadUrl;
+    } catch (e) {
+      throw Exception('upload 실패: $e');
+    }
+  }
+
   Future<void> deleteProfileImage(String? uid) async {
     if (uid == null) {
       throw Exception('잘못된 접근입니다.');

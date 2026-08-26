@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
-import 'dashboard_card.dart';
-import 'workout_manager.dart';
+import '../widgets/dashboard_card.dart';
+import '../logics/workout_manager.dart';
 
 class WorkoutHomePage extends StatefulWidget {
   const WorkoutHomePage({super.key});
@@ -450,6 +450,51 @@ class _WorkoutHomePageState extends State<WorkoutHomePage> {
                     ),
                   ],
                 ),
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: DashboardCard(
+               labelIcon: Icon(
+                  Icons.surfing_outlined,
+                  size: 20,
+                  color: colorScheme.shadow,
+                ),
+                labelText: Text(
+                  '나만의 운동',
+                  style: textTheme.titleSmall?.copyWith(
+                    fontWeight: FontWeight.w800,
+                    color: colorScheme.shadow,
+                  ),
+                ),
+                info: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Container(
+                      width: 70,
+                      height: 70,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(8),
+                        border: Border.all(
+                          color: Colors.grey.shade300,
+                          width: 1,
+                        ),
+                      ),
+                      child: Center(
+                        child: IconButton(
+                          icon: const Icon(Icons.add),
+                          onPressed: () {
+                            context.go('/workout_home/my_workout_list');
+                          },
+                          splashRadius: 24,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                routeOnTap: () {
+
+                },
               ),
             ),
             // part E
