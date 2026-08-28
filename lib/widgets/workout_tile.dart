@@ -1,5 +1,7 @@
 //filename: /widgets/workout_tile.dart
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:workout_tracker_2026/logics/my_workout_provider.dart';
 
 import 'workout_day_selector.dart';
 
@@ -16,7 +18,6 @@ class WorkoutTile extends StatelessWidget {
     required this.image,
     required this.minutes,
   });
-
 
   @override
   Widget build(BuildContext context) {
@@ -55,6 +56,10 @@ class WorkoutTile extends StatelessWidget {
             IconButton(
               onPressed: () {
                 // 삭제 동작 수행
+                Provider.of<MyWorkoutProvider>(
+                  context,
+                  listen: false,
+                ).deleteMyWorkout(index);
               },
               color: colorScheme.outlineVariant,
               icon: Icon(
@@ -64,7 +69,7 @@ class WorkoutTile extends StatelessWidget {
             ),
           ],
         ),
-        subtitle:  WorkoutDaySelector(),
+        subtitle: WorkoutDaySelector(workoutIndex: index,),
       ),
     );
   }

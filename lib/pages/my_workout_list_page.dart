@@ -47,6 +47,7 @@ class MyWorkoutListPage extends StatelessWidget {
               }
               final workout = workouts[index - 1];
               return WorkoutTile(
+                key: ObjectKey(workout),
                 index: index - 1,
                 name: workout.name,
                 image: workout.imageURL,

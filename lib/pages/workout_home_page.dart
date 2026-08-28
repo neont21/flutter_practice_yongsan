@@ -498,45 +498,45 @@ class _WorkoutHomePageState extends State<WorkoutHomePage> {
               ),
             ),
             // part E
-            Expanded(
-              flex: 2,
-              child: DashboardCard(
-                routeOnTap: () {
-                  continueWorkout();
-                },
-                labelIcon: Icon(
-                  Icons.repeat_outlined,
-                  size: textTheme.titleMedium?.fontSize,
-                  color: Colors.blue,
-                  fontWeight: FontWeight.bold,
-                ),
-                labelText: Text(
-                  '운동 이어서 하기',
-                  style: textTheme.titleMedium?.copyWith(
-                    color: Colors.blue,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                info: Stack(
-                  children: [
-                    Align(
-                      alignment: Alignment.bottomLeft,
-                      child: Image.asset('assets/home/continue.png'),
-                    ),
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Padding(
-                        padding: EdgeInsetsGeometry.only(right: 20),
-                        child: Text(
-                          '당신의 몸은 해낼 수 있다.\n당신의 마음만 설득하면 된다.',
-                          style: textTheme.titleLarge,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            // Expanded(
+            //   flex: 2,
+            //   child: DashboardCard(
+            //     routeOnTap: () {
+            //       continueWorkout();
+            //     },
+            //     labelIcon: Icon(
+            //       Icons.repeat_outlined,
+            //       size: textTheme.titleMedium?.fontSize,
+            //       color: Colors.blue,
+            //       fontWeight: FontWeight.bold,
+            //     ),
+            //     labelText: Text(
+            //       '운동 이어서 하기',
+            //       style: textTheme.titleMedium?.copyWith(
+            //         color: Colors.blue,
+            //         fontWeight: FontWeight.bold,
+            //       ),
+            //     ),
+            //     info: Stack(
+            //       children: [
+            //         Align(
+            //           alignment: Alignment.bottomLeft,
+            //           child: Image.asset('assets/home/continue.png'),
+            //         ),
+            //         Align(
+            //           alignment: Alignment.centerRight,
+            //           child: Padding(
+            //             padding: EdgeInsetsGeometry.only(right: 20),
+            //             child: Text(
+            //               '당신의 몸은 해낼 수 있다.\n당신의 마음만 설득하면 된다.',
+            //               style: textTheme.titleLarge,
+            //             ),
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
           ],
         ),
       ),
