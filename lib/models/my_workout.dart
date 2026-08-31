@@ -1,5 +1,7 @@
 import 'dart:core';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class MyWorkout {
   String? id;
   String name;
@@ -16,10 +18,22 @@ class MyWorkout {
     required this.minutes,
     this.uid,
     List<bool>? workoutDays,
-    DateTime? createAt,
+    DateTime? createdAt,
     // }): workoutDays=workoutDays??List.filled(7, false, growable: false);
   }) : workoutDays = _normalizeDays(workoutDays),
-       createdAt = createAt ?? DateTime.now();
+       createdAt = createdAt ?? DateTime.now();
+
+  factory MyWorkout.fromMap(Map<String, dynamic> map) {
+    return MyWorkout(
+      uid: map['uid'],
+      id: map['id'],
+      name: map['name'],
+      workoutDays: List<bool>.from(map['workoutDays']),
+      imageURL: map['imageURL'],
+      minutes: map['minutes'],
+      createdAt: (map['createdAt'] as Timestamp).toDate(),
+    );
+  }
 
   static List<bool> _normalizeDays(List<bool>? days) {
     assert(days == null || days.length == 7, '운동 요일의 Length가 7이어야 합니다');
@@ -37,7 +51,7 @@ class MyWorkout {
       'imageURL': imageURL,
       'workoutDays': workoutDays,
       'uid': uid,
-      'createAt': createdAt,
+      'createdAt': createdAt,
     };
   }
 }
